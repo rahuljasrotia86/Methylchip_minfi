@@ -2,9 +2,13 @@ Epigenetic-mediated transcriptome analysis in primary Sjogren’s disease reveal
 
 # Load Required Libraries
 library("minfi")
+
 library("minfiData")
+
 library("DMRcate")
+
 library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
+
 
 # Load Annotation Data
 ann450k <- getAnnotation(IlluminaHumanMethylation450kanno.ilmn12.hg19)
@@ -15,6 +19,7 @@ dataDirectory <- "extdata"
 list.files(dataDirectory, recursive = TRUE)
 
 targets <- read.metharray.sheet(dataDirectory, pattern="SampleSheet.csv")
+
 RGSet <- read.metharray.exp(targets=targets)
 
 # Quality Control (QC)
@@ -25,6 +30,7 @@ qc <- getQC(MSet)
 plotQC(qc)
 
 detP <- detectionP(RGSet) 
+
 barplot(colMeans(detP), las=2, cex.names=0.8, ylab="Mean detection p-values")
 
 abline(h=0.05, col="red")
@@ -49,7 +55,6 @@ keep <- rowSums(detP < 0.01) == ncol(mSetSq)
 mSetSqFlt <- mSetSq[keep,]
 
 mSetSqFlt <- dropLociWithSnps(mSetSqFlt)
-
 
 # Differential Methylation: CpG-Level (DMPs)
 mVals <- getM(mSetSqFlt)
